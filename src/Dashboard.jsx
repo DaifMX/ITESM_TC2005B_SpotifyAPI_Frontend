@@ -38,6 +38,7 @@ const Dashboard = () => {
     const token = localStorage.getItem('access_token');
 
     const response = await spotifyAPI(updateURL, 'GET', null, token);
+    console.log(response)
  };
 
   return (
