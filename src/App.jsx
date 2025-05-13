@@ -1,9 +1,11 @@
 import './App.css';
 import { getToken } from './getToken';
+import { useNavigate } from 'react-router';
 
 import { authFlow, getDataAuth } from './setup';
 
 function App() {
+  const navigate = useNavigate();
 
   const handleSetup = async () => {
     const code = await getDataAuth();
@@ -12,8 +14,9 @@ function App() {
 
   const handleGetToken = () => {
     getToken();
+    navigate('/dashboard')
   };
-  
+
   return (
     <>
       <h1>Hola Mund34</h1>
