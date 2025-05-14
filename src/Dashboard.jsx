@@ -16,8 +16,8 @@ const Dashboard = () => {
         song: '',
         types: '',
     });
-
     const [results, setResults] = useState([]);
+    const [deviceId, setDeviceId] = useState(null);
 
     const handleChange = (e) => {
         const { value, name } = e.target;
@@ -41,17 +41,33 @@ const Dashboard = () => {
         const token = localStorage.getItem('access_token');
 
         const response = await spotifyAPI(updateURL, 'GET', null, token);
-        console.log(response)
+        console.log(response);
         setResults(response.tracks.items);
     };
 
-    const handlePlay = (result) => {
-        
+    const getDeviceId = async () => {
+        const token = localStorage.getItem('access_token');
+        const url = "https://api.spotify.com/v1/me/player/devices";
+        const response = await spotifyAPI(url, 'GET', null, token);
+
+        setDeviceId(response.devices[0].id);
+    };
+
+    const handlePlay = async (song) => {
+        const token = localStorage.getItem('access_token');
+        const data = {
+            uris: [song]
+        };
+
+        const url = `https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`;
+        const play = await spotifyAPI(url, 'PUT', JSON.stringify(data), token);
+        console.log(play);
     };
 
     return (
         <>
             <div>Dashboard</div>
+            <button onClick={getDeviceId}>GET DEVICE ID</button>
             <p>Search</p>
             <input
                 name="song"
@@ -74,10 +90,10 @@ const Dashboard = () => {
                         <img src={result.album.images[0].url} width={150} alt="SongImg" />
                     </div>
                     <div>
-                        <p>{result.artist[0].name}</p>
+                        <p>{result.artists[0].name}</p>
                     </div>
                     <div>
-                        <button onClick={() => handlePlay(result)}>Play Song</button>
+                        <button onClick={() => handlePlay(result.uri)}>Play Song</button>
                     </div>
                 </div>
             ))}
