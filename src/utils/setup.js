@@ -6,10 +6,7 @@ export const getDataAuth = async () => {
   };
 
   const codeVerifier = generateRandomString(64);
-
-  console.log({ codeVerifier });
-    // generated in the previous step
-    window.localStorage.setItem('code_verifier', codeVerifier);
+  window.localStorage.setItem('code_verifier', codeVerifier);
 
   const sha256 = async (plain) => {
     const encoder = new TextEncoder();
@@ -35,7 +32,6 @@ export const authFlow = (codeChallenge) => {
 
   const scope = 'user-read-playback-state user-modify-playback-state user-read-private user-read-email';
   const authUrl = new URL('https://accounts.spotify.com/authorize');
-
 
   const params = {
     response_type: 'code',
